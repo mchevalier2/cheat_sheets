@@ -206,6 +206,7 @@ Many data types exist in SQL
 * We can perform operations on the lines
     * `SELECT (gross - budget) FROM films`; will return the difference between th two fields for each entry
 * `DISTINCT` opere sur un ensemble de lignes
+* `ALTER TABLE film DROP COLUMN long_description;`
 
 
 ### Aggregations
@@ -365,112 +366,151 @@ Many data types exist in SQL
 
 # 3. Database design
 
+## Broad design
 
+different approaches to processing data OLTP vs. OLAP:
+* OLTP: Online Transaction Processing
+    * Find the price of a book, update latest customer transaction
+    * OLTP focus on supporting day-to-day operations
+* OLAP: Online Analytical Processing
+    * Calculate the books with best profit margin, find most loyal customers
+    * OLAP tasks are vaguer and focus on business decision making
 
-                * different approaches to processing data OLTP vs. OLAP
-                    * OLTP: Online Transaction Processing
-                        * Find the price of a book, update latest customer transaction
-                        * OLTP focus on supporting day-to-day operations
-                    * OLAP: Online Analytical Processing
-                        * Calculate the books with best profit margin, find most loyal customers
-                        * OLAP tasks are vaguer and focus on business decision making
-                ￼
-
-
-                ETL (Extract Tranform Load): The most traditional
-                vs.
-                ELT (Extract Load Transform): this approach is growing with big data
-
-
-
-        * CREATE TABLE tablename(
-            fieldname1 INTEGER PRIMARY KEY,
-            fieldname2 FLOAT NOT NULL,
-            fieldname3 VARCHAR(150) NOT NULL
-        )
-        * ALTER TABLE fact_booksales ADD CONSTRAINT sales_store
-            FOREIGN KEY (store_id) REFERENCES dim_store_star (store_id);
-        * ALTER TABLE dim_author ADD COLUMN author_id SERIAL PRIMARY KEY;
-            * If the table doesn’t have a proper primary key
-
-        * STAR SCHEMA: the simplest form of the dimensional model
-            * Made of two tables: fact and dimension tables
-        ￼    * The snowflake schema is an extension of the star schema
-                * it has more tables
-                * The info below is the same as the info above
-                * it has more dimension sbecause dimension tables are normalized
-
-                * What is normalization?
-            * database design technique
-            * divides tables into smaller tables and connects them via relationships
-            * goal: reduce redundancy and increase data integrity
-            * Need to identify repeating groups of data and to create new tables for them
-        * Why do we want to normalize?
-            * normalize databases have more tables, hence longer queries with more joins
-            * normalization saves space! Eliminates data redundancy
-            * enforces data consistency
-            * afer updating, removing and inserting
-            * easier to redesign by extending
-            * OLTP is write-intensive and we want to prioritize quicker and safer data insertion. OLTP = highliy normalized
-            * OLAP prioritize quicker queries for analytics, hence denormalized.
-        * Formal definition by Adrienne Watt: “The goals of normalization are to: (1) be able to characterise the level of redundancy on a relational schema, and (2) prodive mechanisms for transforming schemas in order to remove redundancy”
-
-
-        In the slides below, the first table example does NOT conform to the the normalization rule; the second table contains the same data and does conform to the normalization rule
-
-
-        * A database that isn’t normalized enough is prone to three types of anomaly errors because of redundancies:
-            * update, insertion, deletion
-            * As tables grow, it can be hard to track redundancies and applies changes everywhere needed
-            * One may want to delete one entry but due to rendundancy end up deleting several.
-            * Most 3NF tables can’t have update, insertion and deletion anomalies
+![caption](./figs/OLAP_v_OLTP_1.png)
+![caption](./figs/OLAP_v_OLTP_2.png)
+![caption](./figs/Data_warehouses.png)
+![caption](./figs/Data_lakes.png)
 
 
 
+ETL (Extract Tranform Load): The most traditional
+vs.
+ELT (Extract Load Transform): this approach is growing with big data
 
-            Database roles and access control
-            * role: an entity that contains privileges, such as can you login? can your create databses? can you write to tables?
-                * CREATE ROLE data_analyst;
-                * CREATE ROLE intern WITH PASSWORD 'PasswordForIntern’ VALID UNTIL ‘2020-01-01'
-                * CREATE ROLE admin WITH CREATEDB LOGIN;
-                * ALTER ROLE admin CREATEROLE;
-            * to change access to objects
-                * GRANT UPDATE ON ratings to data_analyst;
-                * REVOKE UPDATE ON ratings to data_analyst;
-                * ALTER ROLE marta WITH PASSWORD 's3cur3p@ssw0rd';
+![caption](./figs/ETL_ELT.png)
 
 
-                * To give the same amount of roles as a predefined group role to someone
-                * GRANT data_analyst TO alex;
+## Database structure
 
 
-            Table partitionning:
-            * Table grows too large and queries become slow
+* STAR SCHEMA: the simplest form of the dimensional model
+    * Made of two tables: fact and dimension tables
 
-            ￼
-            * CREATE TABLE sales (
-             ...
-             timestamp DATE NOT NULL
-        )
-        PARTITION BY RANGE (timestamp)
+![caption](./figs/star_schema.png)
+![caption](./figs/star_schema_example.png)
 
-        CREATE TABLE sales_2019_q1 PARTITION OF sales FOR VALUES FROM (‘2019-01-01’) TO (‘2019-03-31’)
-        ...
-        CREATE TABLE sales_2019_q4 PARTITION OF sales FOR VALUES FROM (‘2019-10-01’) TO (‘2019-12-31')
-        CREATE INDEX ON sales (‘timestamp’)
-            * Different partitions can be stored on different machines to allow parallel computin; this is called sharding
+* The snowflake schema is an extension of the star schema
+    * it has more tables
+    * The info below is the same as the info above
+    * it has more dimensions because dimension tables are normalized
+
+![caption](./figs/snowflake_schema.png)
 
 
 
-            * Granting and revoking access to a view
-                * GRANT/REVOKE privileges ON viewname TO/FROM role
-                    * privileges: select, insertn update, delete
-                    * role: a database user or a group of database users
-                * GRANT UPDATE ON ratings TO public
-                    * PUBLIC == "all users"
+## Normalization
+* What is normalization?
+    * Formal definition by Adrienne Watt: “The goals of normalization are to: (1) be able to characterise the level of redundancy on a relational schema, and (2) prodive mechanisms for transforming schemas in order to remove redundancy”
+    * database design technique
+    * divides tables into smaller tables and connects them via relationships
+    * goal: reduce redundancy and increase data integrity
+    * Need to identify repeating groups of data and to create new tables for them
 
 
-        * ALTER TABLE film DROP COLUMN long_description;
+* Why do we want to normalize?
+    * normalize databases have more tables, hence longer queries with more joins
+    * normalization saves space! Eliminates data redundancy
+    * enforces data consistency
+    * afer updating, removing and inserting
+    * easier to redesign by extending
+    * **OLTP is write-intensive and we want to prioritize quicker and safer data insertion. OLTP = highliy normalized**
+    * **OLAP prioritize quicker queries for analytics, hence denormalized.**
 
 
-## Unsorted
+![caption](./figs/normal_forms.png)
+
+
+* A database that isn’t normalized enough is prone to three types of anomaly errors because of redundancies:
+    * update, insertion, deletion
+    * As tables grow, it can be hard to track redundancies and applies changes everywhere needed
+    * One may want to delete one entry but due to rendundancy end up deleting several.
+    * Most 3NF tables can’t have update, insertion and deletion anomalies
+
+
+
+In the examples below, the first table example does NOT conform to the the normalization rule; the second table contains the same data and does conform to the normalization rule
+
+### 1NF
+
+![caption](./figs/1NF_rules.png)
+![caption](./figs/1NF_rules_correct.png)
+
+### 2NF
+
+![caption](./figs/2NF_rules.png)
+![caption](./figs/2NF_rules_correct.png)
+
+### 3NF
+
+![caption](./figs/3NF_rules.png)
+![caption](./figs/3NF_rules_correct.png)
+
+
+
+## Database init and security
+
+
+* `CREATE TABLE tablename(
+    fieldname1 INTEGER PRIMARY KEY,
+    fieldname2 FLOAT NOT NULL,
+    fieldname3 VARCHAR(150) NOT NULL
+)`
+* `ALTER TABLE fact_booksales ADD CONSTRAINT sales_store
+    FOREIGN KEY (store_id) REFERENCES dim_store_star (store_id);`
+* `ALTER TABLE dim_author ADD COLUMN author_id SERIAL PRIMARY KEY;`
+    * If the table doesn’t have a proper primary key
+
+Table partitionning:
+* Table grows too large and queries become slow
+
+    `CREATE TABLE sales (`
+     `...`
+    ` timestamp DATE NOT NULL`
+    `)`
+
+
+    `PARTITION BY RANGE (timestamp)`
+
+    `CREATE TABLE sales_2019_q1 PARTITION OF sales FOR VALUES FROM (‘2019-01-01’) TO (‘2019-03-31’)`
+    `...`
+    `CREATE TABLE sales_2019_q4 PARTITION OF sales FOR VALUES FROM (‘2019-10-01’) TO (‘2019-12-31')`
+    `CREATE INDEX ON sales (‘timestamp’)`
+* Different partitions can be stored on different machines to allow parallel computin; this is called sharding
+
+![caption](./figs/partitioning_horizontal.png)
+![caption](./figs/partitioning_vertical.png)
+
+
+
+### Database roles and access control
+* role: an entity that contains privileges, such as can you login? can your create databses? can you write to tables?
+    * `CREATE ROLE data_analyst;`
+    * `CREATE ROLE intern WITH PASSWORD 'PasswordForIntern’ VALID UNTIL ‘2020-01-01'`
+    * `CREATE ROLE admin WITH CREATEDB LOGIN;`
+    * `ALTER ROLE admin CREATEROLE;`
+* to change access to objects
+    * `GRANT UPDATE ON ratings to data_analyst;`
+    * `REVOKE UPDATE ON ratings to data_analyst;`
+    * `ALTER ROLE marta WITH PASSWORD 's3cur3p@ssw0rd';`
+
+* To give the same amount of roles as a predefined group role to someone
+    * `GRANT data_analyst TO alex;`
+
+* Granting and revoking access to a view
+    * `GRANT/REVOKE privileges ON viewname TO/FROM role`
+        * privileges: select, insertn update, delete
+        * role: a database user or a group of database users
+    * `GRANT UPDATE ON ratings TO public`
+        * PUBLIC is equivalent o "all users"
+
+![caption](./figs/psql_privileges.png)
