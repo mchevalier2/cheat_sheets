@@ -1,5 +1,5 @@
 ---
-title: "workshop"
+title: "SQL cheat sheet"
 author: "Manuel"
 date: "2024-11-08"
 output:
