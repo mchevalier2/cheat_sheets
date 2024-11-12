@@ -1,7 +1,7 @@
 ---
-title: "SQL cheat sheet"
+title: "Matplotlib/Seaborn cheat sheet"
 author: "Manuel"
-date: "2024-11-08"
+date: "2024-11-11"
 output:
   html_document:
       toc: true

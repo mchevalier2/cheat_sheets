@@ -11,9 +11,9 @@
 
 <meta name="author" content="Manuel" />
 
-<meta name="date" content="2024-11-11" />
+<meta name="date" content="2024-11-12" />
 
-<title>Matplotlib/Seaborn cheat sheet</title>
+<title>Linux cheat sheet</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1479,304 +1479,129 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">Matplotlib/Seaborn cheat sheet</h1>
+<h1 class="title toc-ignore">Linux cheat sheet</h1>
 <h4 class="author">Manuel</h4>
-<h4 class="date">2024-11-11</h4>
+<h4 class="date">2024-11-12</h4>
 
 </div>
 
 
-<p>This document is divided in three sections:</p>
-<pre><code>1. Matplotlib
-2. Seaborn</code></pre>
-<div id="matplotlib" class="section level1">
-<h1>1. Matplotlib</h1>
+<div id="naviguer-sous-linux" class="section level2">
+<h2>Naviguer sous Linux</h2>
 <ul>
-<li><code>import matplotlib.pyplot as plt</code></li>
-<li>Standard framework
-<ul>
-<li><code>fig, ax = plt.subplots()</code>
-<ul>
-<li>This function can be used to split the plotting window (similar to
-par(mfrow())
-<ul>
-<li><code>plt.subplots(3, 2)</code> ## 3 lines and 2 columns</li>
-</ul></li>
-<li>the <code>ax</code> object has now the dimension of the subplot
-<code>ax[0, 0].plot()</code></li>
-<li>The option <code>sharey=True</code> (“share y axis”) imposes that
-all the y axes will have the same range</li>
-</ul></li>
-<li><code>ax.plot()</code></li>
-<li><code>plt.show()</code></li>
-</ul></li>
-<li>Parameterize plots
-<ul>
-<li><code>ax.set_xlabel(‘Time (month)’)</code>
-<ul>
-<li>the ax object has several methods starting with “set” to
-parameterise the plot</li>
-</ul></li>
-<li><code>ax.set_title(“title”)</code></li>
-<li><code>ax.set_axis_label(“x-axis-label”, “y-axis-label”)</code></li>
-<li><code>ax.tick_params(“y”, colors=‘blue’)</code> (note the plural of
-colors here)</li>
-<li><code>ax.set_xticklabels(x, rotation=90)</code></li>
-<li><code>ax.errorbar(x, y, yerr=z)</code></li>
-<li><code>ax2 = ax.twinx()</code>
-<ul>
-<li>Allows adding a second curve with a different y-scale on the same
-plot.</li>
-</ul></li>
-<li><code>ax.annotate(text, xy=(posx, posy), xytext=(posx, posy), arrowprops={&#39;arrowstyle&#39;: &#39;-&gt;&#39;, &#39;color&#39;: &#39;gray&#39;})</code></li>
-<li>markers: <code>axplot(…, marker=‘o’)</code>
-<ul>
-<li>‘o’ for circles, ‘v’ for inverted triangles ==&gt; <a href="https://matplotlib.org/stable/api/markers_api.html" class="uri">https://matplotlib.org/stable/api/markers_api.html</a></li>
-</ul></li>
-<li>linestyle: <code>axplot(…, linestyle=‘--‘)</code> to make dashed
-lines <a href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" class="uri">https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html</a></li>
-<li>color: <code>axplot(…, color=‘r’)</code></li>
-<li><code>plt.yscale(‘log’)</code></li>
-</ul></li>
-<li>BARPLOTS
-<ul>
-<li><code>ax.bar(x, y1, label=‘Gold medals’)</code></li>
-<li><code>ax.bar(x, y2, bottom=y1, label=‘Silver medals’)</code></li>
-<li><code>ax.bar(x, y3, bottom=y1+y2, label=‘Bronze medals’)</code>
-<ul>
-<li>Adding labels is necessary for the legend</li>
-<li>The bar are stacked on top of each other with the bottom
-parameter</li>
-</ul></li>
-<li>ADDING ERROR BARS:
-<ul>
-<li><code>ax.bar(“Gold medals”, y1.mean(), yerr=y1.std())</code>
-<ul>
-<li>?! same function
-<ul>
-<li>Yes the same. It produces the same figure but with error bars.</li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><code>ax.legend()</code></li>
-</ul></li>
-<li>HISTOGRAMS:
-<ul>
-<li><code>ax.hist(var_to_plot, label=‘label_for_caption’, bins=10 / [list_of_bin_sizes])</code>
-<ul>
-<li>Adding <code>histtype=‘step’</code> allows to only plot the outside
-of the histogram, so that overlapping sections are more visible</li>
-</ul></li>
-</ul></li>
-<li>BOXPLOTS;
-<ul>
-<li><code>ax.boxplot([var1, var2])</code></li>
-<li><code>ax.set_xticklabels([“lab1”, “lab2”])</code></li>
-</ul></li>
-<li>SCATTERPLOTS
-<ul>
-<li><code>ax.scatter(val1, val2, color=‘blue’, label=‘mnmjn’)</code></li>
-<li>USEFUL TIP: use the c argument to colour code along a third
-variable. Default seems to be viridis colour scheme
-<ul>
-<li><code>c=val3</code></li>
-</ul></li>
-</ul></li>
-<li>STYLE
-<ul>
-<li><code>plt.style.use(‘ggplot’)</code>
-<ul>
-<li>Call this before the plt.subplots()</li>
-<li><code>plt.style.use(“default’)</code></li>
-<li><a href="https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html" class="uri">https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html</a></li>
-</ul></li>
-</ul></li>
-<li>EXPORT
-<ul>
-<li>To export figures, use
-<code>fig.savefig(“filename.png”, dpi=300)</code> instead of
-<code>plt.show()</code></li>
-<li><code>fig.set_size_inches([5, 3])</code></li>
-</ul></li>
+<li><code>whoami</code> —&gt; palaeosaurus</li>
+<li><code>pwd</code> —&gt; print working directory</li>
+<li><code>ls (-a)</code> —&gt; list tous les fichiers dispo (inclue les
+fichiers cachés)</li>
+<li><code>ls -h</code> donne la taille des fichiers en format
+lisible</li>
+<li><code>ls -lt</code> —&gt; trier par date de modif</li>
+<li><code>ls -lS</code> —&gt; trier par taille</li>
+<li><code>touch filename</code> —&gt; create an empty file, modifie le
+timestamp as well</li>
+<li><code>touch file{1..42}</code> will create 42 files called file1,
+file2, …, file42</li>
+<li><code>cd</code> —&gt; change directory (cd .. —&gt; returns to the
+previous folder)</li>
+<li><code>useradd</code> —&gt; create a user</li>
 </ul>
 </div>
-<div id="seaborn" class="section level1">
-<h1>2. Seaborn</h1>
+<div id="manipulation-de-fichiers-et-dossiers" class="section level2">
+<h2>Manipulation de fichiers et dossiers</h2>
 <ul>
-<li><p>Seaborn is built on matplotlib and pandas</p>
+<li><code>echo ‘hello’ &gt; est.txt</code> will write to est.txt. The
+single &gt; overwrite the fichier</li>
+<li><code>echo ‘hello’ &gt;&gt; est.text</code> . The double &gt;&gt;
+adds to existing files</li>
+<li><code>rm remove files</code> (irréversibles)</li>
+<li><code>rm file -i</code> (asks for confirmation)</li>
+<li><code>mkdir test_folder</code></li>
+<li><code>mkdir -p folder/subfolder</code></li>
+<li><code>rm -r folder</code></li>
+<li><code>cp file address</code></li>
+<li><code>cp -r folder address</code></li>
+<li><code>mv file/folder address</code></li>
+</ul>
+</div>
+<div id="exécuter-un-script" class="section level2">
+<h2>Exécuter un script</h2>
 <ul>
-<li><code>import seaborn as sns</code></li>
-<li><code>sns.scatterplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness)</code></li>
-<li><code>sns.lmplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness, ci=None)</code>
+<li><code>which bash</code> —&gt; Tells where bash is. This can be added
+at the beginning of scripts</li>
+<li><code>which python*</code></li>
+<li><code>ls -la | grep script</code></li>
+<li><code>chmod +x script.sh</code> —&gt; everybody can use the
+script</li>
+<li><code>chmod -x script.sh</code></li>
+<li><code>chmod u+x script.sh</code> —&gt; Only the user can use the
+script</li>
+<li><code>ls /usr/bin.python*</code> —&gt; list tous les pythons
+disponibles</li>
+<li><code>#! /usr/bin/python3</code> —&gt; if added at the beginning,
+makes the script executable with python 3</li>
+</ul>
+</div>
+<div id="environnements" class="section level2">
+<h2>Environnements</h2>
 <ul>
-<li>A scatter plot with a line, but not a correlation line. it’s a
-linear model with x as explanatory variable</li>
-</ul></li>
-</ul></li>
-<li><p>You still need to load matplotlib.pyplot as plt. —&gt;
-<code>plt.show()</code></p></li>
-<li><p>RELATIONAL PLOTS</p>
+<li><code>ls &gt; /dev/null</code> —&gt; redirige the STDOUT vers le
+vide intersidéral</li>
+<li><code>ls -w 1&gt; /devl/null</code> —&gt; strictement equivalent.
+Renvoie le STDOUT. Le flag w n’existe pas sous linux, mais ici ne crée
+pas d’erreur</li>
+<li><code>ls -w 2&gt; /dev/nill</code> —&gt; renvoie le STDERR</li>
+</ul>
+</div>
+<div id="utilitaires" class="section level2">
+<h2>Utilitaires</h2>
 <ul>
-<li><code>sns.scatterplot(x, y)</code>
+<li><code>history</code></li>
+<li><code>ping www.google.com</code></li>
+<li><code>zip dest.zip file_to_zip</code></li>
+<li><code>man zip</code> (long et verbeux)</li>
+<li><code>tldr zip</code> (comme man mais simplifié)
+#TooLongDidntRead</li>
+<li><code>(sudo) reboot</code></li>
+<li><code>sudo apt install tldr</code> //
+<code>brew install tldr</code></li>
+<li><code>apt update</code></li>
+<li><code>update install pkg</code></li>
+</ul>
+</div>
+<div id="vim" class="section level2">
+<h2>vim</h2>
 <ul>
-<li><code>sns.scatterplot(x=‘name_x’, y=‘name_y’, data=df, hue=‘col_to_colour’, palette=colorscale)</code>
+<li>to start typing, your need to get in insert mode. To do so, type
+‘i’.</li>
+<li>To leave ‘insert mode’, hit ‘ESC’</li>
+<li>To save ‘:w’ (for write)</li>
+<li>To save and quit ‘:wq’ or ‘:x’</li>
+<li>To quit without saving ‘:q!’ (for quit)</li>
+</ul>
+</div>
+<div id="la-variable-path" class="section level2">
+<h2>La variable PATH</h2>
 <ul>
-<li><code>colorscale={‘val1’:’red’, ‘val2’:’black’}</code></li>
-</ul></li>
-</ul></li>
-<li><code>sns.lineplot()</code>
+<li>echo $PATH | tr “:” “”</li>
+<li>export ENV=“dev”</li>
+<li>export PATH=~/Workspace/:$PATH</li>
+<li>export ne fonctionne que pour la session en cours</li>
+<li>alis hist=‘hist | grep’ —&gt; combiens history and grep. hist
+sudo</li>
+</ul>
+</div>
+<div id="lister-et-killer-les-process" class="section level2">
+<h2>Lister et killer les process</h2>
 <ul>
-<li><code>ax.wxvline(35)</code>, <code>ax.axvline(65)</code> to add two
-vertical lines</li>
-</ul></li>
-<li><code>sns.relplot()</code> for relation plot. This can make scatter
-or line plots.
+<li>ctrl Z pauses the process. It still exists and can be restarted as
+is wi ‘fg’ (for foreground)</li>
+<li>ctrl C kills the process, which cannot be restarted</li>
+<li>htop lists all processes. You can navigate the list with the arrows
+and kill the desired processes with k
 <ul>
-<li>The “advantage” is that it can easily create subplots</li>
-<li><code>kind=“scatter” / “line”</code>
-*<code>sns.relplot(x, y, data=df, kind=‘scatter’, row/col=var_to_split)</code>
-<ul>
-<li>row creates a figure with several rows, col creates a figure with
-several columns</li>
-<li>both can be combined using two variables</li>
-<li><code>col_wrap=2</code> -&gt; will do the same a col but will limit
-the number of columns to 2 so it wraps on the next line</li>
-<li><code>col_order = [val1, val2, val5, val3, val18]</code></li>
-<li><code>size=var_to_size_dots</code></li>
-<li><code>hue=var_to_size_dots</code> is a nice combo with the other
-one</li>
-<li><code>style</code>: changes the shape of the dot</li>
-<li><code>alpha</code>: changes the transparency</li>
-<li><code>markers = True</code> in case of a lineplot will add a marker
-on the line</li>
-<li><code>dashes=True/False</code> for lineplots</li>
-<li><code>palette = sns.color_palette(’Set1’)</code></li>
-<li>for a line plot, if you have several values for x values, it will
-represent the mean with a CI
-<ul>
-<li><code>ci=“sd”, ci=None</code>, default (param value unknown at this
-point) is the 95% interval of the mean</li>
-</ul></li>
-</ul></li>
-</ul></li>
-</ul></li>
-<li><p>CATEGORICAL PLOTS</p>
-<ul>
-<li><code>sns.countplot(y=var)</code> y instead of x makes a vertical
-barplot. Colours are nice
-<ul>
-<li><code>sns.countplot(x’=column_name’, data=df, hue=‘another_col’, hue_order=[val1, val2, val3, ..)</code></li>
-</ul></li>
-<li><code>sns.histplot(x, data, binwidth=0.1)</code>
-<ul>
-<li><code>sns.histplot(x, y)</code> makes a 2D map with colours mapping
-the values in z</li>
-</ul></li>
-<li><code>sns.catplot()</code> with advantages similar to relplot()
-<ul>
-<li><code>kind=“count”</code> plot or <code>kind=“bar”</code> plot or
-<code>kind=‘box’</code> for boxplots or <code>kind=‘point’</code> for
-point plots
-<ul>
-<li>strip, swarm, box, violin, boxen, point, bar, count</li>
-</ul></li>
-<li><code>order=list_of_ordered_parameters</code> to sort the type of
-categories plotted (e.g. if they are ranks for 1 to 5, or days of the
-week)</li>
-<li><code>sym = ‘’</code> will remove the outliers on a boxplot</li>
-<li><code>whis=2</code> (2 times the IQR), <code>whis=[5, 95]</code>,
-<code>whis=[0,100]</code> &lt;- min/max values</li>
-<li><code>hue=variable</code> splits the data in categories (2 boxplots
-or 2 lines for each x value</li>
-<li>point plots &gt;&gt; bar plots</li>
-<li><code>join=False</code> in point plots remove the line connecting
-the dots</li>
-<li><code>estimator=np.median</code></li>
-<li><code>capsize=0.2</code> changes the length of the top and bottom
-ticks on error bars</li>
-<li><code>dodge=True</code> allows for some extra space on the x axis to
-avoid overlap of data points</li>
-</ul></li>
-</ul></li>
-<li><p>GENERIC PLOTS</p>
-<ul>
-<li><code>sns.headmap(df.corr(), annot=TRUE); plt.show()</code></li>
-<li><code>sns.pairplot(data=df, vars=[var1, var2, var3])</code>
-<ul>
-<li>make a scatterplot for each pair of variables selected</li>
-</ul></li>
-<li><code>sns.kdeplot(data=df, x=var_x, hue=&quot;categorical_variable”, cut=0)</code>
-<ul>
-<li>Make a kde plot of variable var_x for each level of the categorical
-variable</li>
-<li><code>cut=0</code> means that the plot will be cut at 0</li>
-<li><code>cumulative = True</code> for the cdf</li>
-</ul></li>
-<li><code>sns.violinplot(x=df[&#39;var’])</code></li>
-<li><code>sns.boxplot(x, y, data)</code></li>
-<li><code>sns.swarmplot()</code>
-<ul>
-<li>spreads groups of data with the same x horizontally</li>
-</ul></li>
-<li><code>sns.jointplot</code>
-<ul>
-<li>combines a scatterplot with marginal distributions on top and right
-sides</li>
-</ul></li>
-</ul></li>
-<li><p>seaborn has 5 figures styles</p>
-<ul>
-<li><code>sns.set_style(style)</code> white (default), dark, whitegrid,
-darkgrid, ticks</li>
-<li><code>sns.set(font_scale=1.4)</code></li>
-<li><code>sns.set_palette()</code>
-<ul>
-<li>embedded palettes (add <code>“_r”</code> to palette name to reverse
-it
-<ul>
-<li>diverging RdBu PRGn (purple to green),</li>
-<li>sequential Greys Blues PuRd (light purple to red to dark pink)
-Purples</li>
-<li>GnBu (rainfall palette)</li>
-</ul></li>
-<li>Add your own with a list of colours</li>
-</ul></li>
-<li><code>sns.set_context()</code> paper (default) notebook talk
-poster</li>
-</ul></li>
-<li><p>seaborn returns two object types, usually called g</p>
-<ul>
-<li>FacetGrid created by relplot and catplot to handle subplots
-<ul>
-<li><code>g.fig.suptitle(“New title”, y=1.03)</code>
-<ul>
-<li>y is used to adjust the position of the title which is a bit low by
-default</li>
-</ul></li>
-<li><code>g.set_titles(“This is {colname}”)</code>
-<ul>
-<li>adds a unique title to each subplot</li>
-</ul></li>
-<li><code>g.set(xlabel=“lab”, ylabel=“lab”)</code></li>
-<li><code>plt.xticks(rotation=90)</code> to rotation the x labels
-<ul>
-<li>Note that we go back to matplotlib here!!</li>
-</ul></li>
-<li><code>plt.subplots_adjust(top=0.9)</code> brings the title a bit
-lower</li>
-</ul></li>
-<li>AxesSubplot return from single plots
-<ul>
-<li><code>g.set_title(“New title”, y=1.03)</code></li>
-<li><code>g.set(xlabel=“lab”, ylabel=“lab”)</code></li>
-<li><code>plt.xticks(rotation=90)</code> to rotation the x labels
-<ul>
-<li>Note that we go back to matplotlib here!!</li>
-</ul></li>
-</ul></li>
+<li>Equivalent to top and kill PID</li>
 </ul></li>
 </ul>
-<p>##-;</p>
 </div>
 
 
