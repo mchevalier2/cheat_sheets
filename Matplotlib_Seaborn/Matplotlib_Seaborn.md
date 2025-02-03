@@ -1,7 +1,7 @@
 ---
 title: "Matplotlib/Seaborn cheat sheet"
 author: "Manuel"
-date: "2024-11-11"
+date: "2025-02-03"
 output:
   html_document:
       toc: true
@@ -20,11 +20,13 @@ This document is divided in three sections:
 
 * `import matplotlib.pyplot as plt`
 * Standard framework
-    * `fig, ax = plt.subplots()`
-        * This function can be used to split the plotting window (similar to par(mfrow())
-            * `plt.subplots(3, 2)` ## 3 lines and 2 columns
-        * the `ax` object has now the dimension of the subplot `ax[0, 0].plot()`
-        * The option `sharey=True` (“share y axis”) imposes that all the y axes will have the same range
+    * `fig = plt.figure()`
+    * Or alternatively for subpltots:
+        * `fig, ax = plt.subplots()`
+            * This function can be used to split the plotting window (similar to par(mfrow())
+                * `plt.subplots(3, 2)` ## 3 lines and 2 columns
+            * the `ax` object has now the dimension of the subplot `ax[0, 0].plot()`
+            * The option `sharey=True` (“share y axis”) imposes that all the y axes will have the same range
     * `ax.plot()`
     * `plt.show()`
 * Parameterize plots
@@ -43,6 +45,16 @@ This document is divided in three sections:
     * linestyle: `axplot(…, linestyle=‘--‘)` to make dashed lines https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html
     * color: `axplot(…, color=‘r’)`
     * `plt.yscale(‘log’)`
+    * `plt.axis('equal')`
+        * makes the two axis vary similarly (asp=1 in R)
+    * Add a vectical rectangle along axis (like abline but for rectangles)
+        * `plt.axvspan(xmin, xmax, alpha=0.5)`
+
+
+
+* ADD LINES
+    * `plt.axline(xy1 = (xval, yval), slope = 1, linewidth=2, color="green")`
+    * `plt.axhline(y=1, linestyle='dotted', linewidth=2, color="green")`
 
 
 
@@ -96,8 +108,7 @@ This document is divided in three sections:
 * Seaborn is built on matplotlib and pandas
     * `import seaborn as sns`
     * `sns.scatterplot(x='life_exp', y='happiness_score', data=world_happiness)`
-    * `sns.lmplot(x='life_exp', y='happiness_score', data=world_happiness, ci=None)`
-        * A scatter plot with a line, but not a correlation line. it’s a linear model with x as explanatory variable
+
 * You still need to load matplotlib.pyplot as plt. —> `plt.show()`
 
 
@@ -126,6 +137,20 @@ This document is divided in three sections:
                 * `ci=“sd”, ci=None`, default (param value unknown at this point) is the 95% interval of the mean
 
 
+
+* LINEAR MODELS
+    * `sns.regplot(x='life_exp', y='happiness_score', data=world_happiness, ci=None)`
+        * A scatter plot with a line, but not a correlation line. it’s a linear model with x as explanatory variable
+        * `logistic=True`
+    * `sns.lmplot(x='life_exp', y='happiness_score', data=world_happiness, ci=None)`
+        * This is a type of FacetGrid plot
+    * `sns.residplot(x, y, data=df, lowess=True)`
+      `plt.xlabel("Fitted values”)`
+      `
+plt.ylabel(‘Residuals’)`
+
+
+
 * CATEGORICAL PLOTS
     * `sns.countplot(y=var)` y instead of x makes a vertical barplot. Colours are nice
         * `sns.countplot(x’=column_name’, data=df, hue=‘another_col’, hue_order=[val1, val2, val3, ..)`
@@ -146,6 +171,14 @@ This document is divided in three sections:
 
 
 
+* DISTRIBUTION PLOTS
+    * `sns.displot(data=taiwan_real_estate, x='price_twd_msq', col='house_age_years', bins=10)`
+        * plots histograms in FacetGrid
+        * `y` instead of `col` makes a 2D histogram
+        * `kind='kde'`
+
+
+
 * GENERIC PLOTS
     * `sns.headmap(df.corr(), annot=TRUE); plt.show()`
     * `sns.pairplot(data=df, vars=[var1, var2, var3])`
@@ -156,6 +189,8 @@ This document is divided in three sections:
         * `cumulative = True` for the cdf
     * `sns.violinplot(x=df['var’])`
     * `sns.boxplot(x, y, data)`
+    * `sns.boxenplot(x, y, data)`
+        * Revisits the boxplot in, in my opinion, something uglier and less easy to understand
     * `sns.swarmplot()`
         * spreads groups of data with the same x horizontally
     * `sns.jointplot`

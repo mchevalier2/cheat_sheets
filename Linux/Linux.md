@@ -1,7 +1,7 @@
 ---
 title: "Linux cheat sheet"
 author: "Manuel"
-date: "2024-11-12"
+date: "2025-02-03"
 output:
   html_document:
       toc: true

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Manuel" />
 
-<meta name="date" content="2024-11-11" />
+<meta name="date" content="2025-02-03" />
 
 <title>Matplotlib/Seaborn cheat sheet</title>
 
@@ -1481,7 +1481,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Matplotlib/Seaborn cheat sheet</h1>
 <h4 class="author">Manuel</h4>
-<h4 class="date">2024-11-11</h4>
+<h4 class="date">2025-02-03</h4>
 
 </div>
 
@@ -1495,6 +1495,9 @@ border-radius: 0px;
 <li><code>import matplotlib.pyplot as plt</code></li>
 <li>Standard framework
 <ul>
+<li><code>fig = plt.figure()</code></li>
+<li>Or alternatively for subpltots:
+<ul>
 <li><code>fig, ax = plt.subplots()</code>
 <ul>
 <li>This function can be used to split the plotting window (similar to
@@ -1506,6 +1509,7 @@ par(mfrow())
 <code>ax[0, 0].plot()</code></li>
 <li>The option <code>sharey=True</code> (“share y axis”) imposes that
 all the y axes will have the same range</li>
+</ul></li>
 </ul></li>
 <li><code>ax.plot()</code></li>
 <li><code>plt.show()</code></li>
@@ -1537,6 +1541,19 @@ plot.</li>
 lines <a href="https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html" class="uri">https://matplotlib.org/stable/gallery/lines_bars_and_markers/linestyles.html</a></li>
 <li>color: <code>axplot(…, color=‘r’)</code></li>
 <li><code>plt.yscale(‘log’)</code></li>
+<li><code>plt.axis(&#39;equal&#39;)</code>
+<ul>
+<li>makes the two axis vary similarly (asp=1 in R)</li>
+</ul></li>
+<li>Add a vectical rectangle along axis (like abline but for rectangles)
+<ul>
+<li><code>plt.axvspan(xmin, xmax, alpha=0.5)</code></li>
+</ul></li>
+</ul></li>
+<li>ADD LINES
+<ul>
+<li><code>plt.axline(xy1 = (xval, yval), slope = 1, linewidth=2, color=&quot;green&quot;)</code></li>
+<li><code>plt.axhline(y=1, linestyle=&#39;dotted&#39;, linewidth=2, color=&quot;green&quot;)</code></li>
 </ul></li>
 <li>BARPLOTS
 <ul>
@@ -1607,11 +1624,6 @@ variable. Default seems to be viridis colour scheme
 <ul>
 <li><code>import seaborn as sns</code></li>
 <li><code>sns.scatterplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness)</code></li>
-<li><code>sns.lmplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness, ci=None)</code>
-<ul>
-<li>A scatter plot with a line, but not a correlation line. it’s a
-linear model with x as explanatory variable</li>
-</ul></li>
 </ul></li>
 <li><p>You still need to load matplotlib.pyplot as plt. —&gt;
 <code>plt.show()</code></p></li>
@@ -1660,6 +1672,22 @@ point) is the 95% interval of the mean</li>
 </ul></li>
 </ul></li>
 </ul></li>
+<li><p>LINEAR MODELS</p>
+<ul>
+<li><code>sns.regplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness, ci=None)</code>
+<ul>
+<li>A scatter plot with a line, but not a correlation line. it’s a
+linear model with x as explanatory variable</li>
+<li><code>logistic=True</code></li>
+</ul></li>
+<li><code>sns.lmplot(x=&#39;life_exp&#39;, y=&#39;happiness_score&#39;, data=world_happiness, ci=None)</code>
+<ul>
+<li>This is a type of FacetGrid plot</li>
+</ul></li>
+<li><code>sns.residplot(x, y, data=df, lowess=True)</code>
+<code>plt.xlabel(&quot;Fitted values”)</code>
+<code>plt.ylabel(‘Residuals’)</code></li>
+</ul></li>
 <li><p>CATEGORICAL PLOTS</p>
 <ul>
 <li><code>sns.countplot(y=var)</code> y instead of x makes a vertical
@@ -1698,6 +1726,15 @@ ticks on error bars</li>
 avoid overlap of data points</li>
 </ul></li>
 </ul></li>
+<li><p>DISTRIBUTION PLOTS</p>
+<ul>
+<li><code>sns.displot(data=taiwan_real_estate, x=&#39;price_twd_msq&#39;, col=&#39;house_age_years&#39;, bins=10)</code>
+<ul>
+<li>plots histograms in FacetGrid</li>
+<li><code>y</code> instead of <code>col</code> makes a 2D histogram</li>
+<li><code>kind=&#39;kde&#39;</code></li>
+</ul></li>
+</ul></li>
 <li><p>GENERIC PLOTS</p>
 <ul>
 <li><code>sns.headmap(df.corr(), annot=TRUE); plt.show()</code></li>
@@ -1714,6 +1751,11 @@ variable</li>
 </ul></li>
 <li><code>sns.violinplot(x=df[&#39;var’])</code></li>
 <li><code>sns.boxplot(x, y, data)</code></li>
+<li><code>sns.boxenplot(x, y, data)</code>
+<ul>
+<li>Revisits the boxplot in, in my opinion, something uglier and less
+easy to understand</li>
+</ul></li>
 <li><code>sns.swarmplot()</code>
 <ul>
 <li>spreads groups of data with the same x horizontally</li>

@@ -1,7 +1,7 @@
 ---
 title: "SQL cheat sheet"
 author: "Manuel"
-date: "2024-11-08"
+date: "2025-02-03"
 output:
   html_document:
       toc: true
@@ -41,9 +41,14 @@ Many data types exist in SQL
         * This will search for the text_to_search in all possible fields of the array
         * Equivalent to ```WHERE field_as_array @> ARRAY[‘text_to_search’]```
 
+* Access list of tables from INFORMATION_SCHEMA
+    * ```SELECT table_schema, table_name FROM information_schema.tables```
 
-* Access the data types from the INFORMATION_SCHEMA table
-    * ```SELECT column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS WHERE column_name IN () AND table_name='xxx’;```
+* Access the columns and data types from the INFORMATION_SCHEMA table
+    * ```SELECT column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS WHERE column_name IN () AND table_name='xxx';```
+
+* Access the constraints from the INFORMATION_SCHEMA table
+    * ```SELECT constraint_name, table_name, constraint_type FROM INFORMATION_SCHEMA.table_constraints ;```
 
 
 * Changing (casting) a column type into another
@@ -459,18 +464,59 @@ In the examples below, the first table example does NOT conform to the the norma
 
 ## Database init and security
 
-
-* `CREATE TABLE tablename(
+* ```CREATE TABLE tablename(
     fieldname1 INTEGER PRIMARY KEY,
     fieldname2 FLOAT NOT NULL,
-    fieldname3 VARCHAR(150) NOT NULL
-)`
+    fieldname3 VARCHAR(150) NOT NULL,
+    fieldname4 numeric(3, 2),            -- 5.54 (two decimals)
+    example_foreign_key INTEGER REFERENCES another_Table(field)
+)```
+
+### Altering database schema
+
+
 * `ALTER TABLE fact_booksales ADD CONSTRAINT sales_store
     FOREIGN KEY (store_id) REFERENCES dim_store_star (store_id);`
 * `ALTER TABLE dim_author ADD COLUMN author_id SERIAL PRIMARY KEY;`
     * If the table doesn’t have a proper primary key
 
-Table partitionning:
+* Move data betweent tables
+    * ```INSERT INTO table SELECT DISTINCT col1, col2 FROM other_table```
+    * ```INSERT INTO table (col1, col2) VAUES ("value_a", "value_b");```
+
+* Rename column
+    * ```ALTER TABLE table_name RENAME COLUMN old_name TO new_name```
+
+* Drop column
+    * ```ALTER TABLE table_name DROP COLUMN column_name;```
+
+* Change data type
+    * ```ALTER TABLE table_name ALTER COLUMN name TYPE varchar(128);```
+    * ```ALTER TABLE table_name ALTER COLUMN avg_grade TYPE INTEGER USING ROUND(avg_grade);```
+    * ```ALTER TABLE table_name ALTER COLUMN name SET NOT NULL```
+    * ```ALTER TABLE table_name ALTER COLUMN name DROP NOT NULL```
+
+** Add column
+    * ```ALTER TABLE cars ADD COLUMN id serial PRIMARY KEY;```
+    * ```ALTER TABLE table ADD COLUMN new_col VARCHAR(256) ; UPDATE table SET new_col = CONCAT(col1, col2)```
+
+* Add constraints
+    * ```ALTER TABLE table_name ADD CONSTRAINT some_name UNIQUE(colname);```
+    * ```ALTER TABLE table_name ADD CONSTRAINT some_name PRIMARY KEY(colname);```
+    * ```ALTER TABLE table_name ADD CONSTRAINT some_name FOREIGN KEY(colname) REFERENCES another_table (field);```
+    * ```ADD CONSTRAINT affiliations_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES organizations (id) ON DELETE CASCADE;```
+        * This adds a foreign key and the rows will be automatically deleted if the foreign key is deleted from the main table. It will propagate here instead of raising an error.
+    *
+
+
+* Delete table
+    * ```DROP TABLE table_name```
+
+
+
+
+## Table partitionning
+
 * Table grows too large and queries become slow
 
     `CREATE TABLE sales (`
@@ -490,6 +536,13 @@ Table partitionning:
 ![caption](./figs/partitioning_horizontal.png)
 ![caption](./figs/partitioning_vertical.png)
 
+
+### Integrity constraints
+
+Three types of constraits:
+    * Attribute constraints (data types)
+    * Key constaints (primary keys)
+    * Referential integrity constraints
 
 
 ### Database roles and access control
